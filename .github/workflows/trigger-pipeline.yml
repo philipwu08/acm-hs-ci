@@ -16,28 +16,21 @@ jobs:
   query:
     runs-on: ubuntu-latest
     steps:
+    - name: Run a one-line script
+      uses: actions/checkout@v3
+      run: echo Checkout repo
     - name: Query Quay.io
       id: quay
       uses: fjogeleit/http-request-action@v1
       with:
-        url: 'https://quay.io/api/v1/repository/stolostron/acm-custom-registry/tag/?limit=10'
+        url: 'https://quay.io/api/v1/repository/stolostron/acm-custom-registry/tag/?limit=30'
         method: 'GET'
         customHeaders: '{"Content-Type": "application/json"}'
     - name: Show Response
       run: |
-        echo ${{ steps.quay.outputs.response }}
-        echo ${{ fromJson(steps.quay.outputs.response).field_you_want_to_access }}
-  commit:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Update build
+        snapshot = $(echo ${{ steps.quay.outputs.response }} | jq '[ .tags[].name] | map(select(. | startswith("2.6.0-SNAPSHOT")))' | jq .[0])
+        echo $snapshot > snapshot.txt
+        git add snapshot.txt
+        git commit -s -m $snapshot
 
         
