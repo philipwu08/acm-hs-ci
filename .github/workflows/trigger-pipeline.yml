@@ -35,4 +35,5 @@ jobs:
         git config --get remote.origin.url
         git add snapshot.txt
         git commit -s -m $snapshot
+        git push origin main
         
