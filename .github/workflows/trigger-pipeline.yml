@@ -32,6 +32,7 @@ jobs:
         cat snapshot.txt
         git config --global user.email "phwu@redhat.com"
         git config --global user.name "Philip Wu"
+        git config --get remote.origin.url
         git add snapshot.txt
         git commit -s -m $snapshot
         
