@@ -27,7 +27,7 @@ jobs:
         customHeaders: '{"Content-Type": "application/json"}'
     - name: Show Response
       run: |
-        echo ${{ toJson(steps.quay.outputs.response) | jq .tags }}
+        echo ${{ toJson(steps.quay.outputs.response) }} | jq .tags 
         echo "snapshot=$(echo ${{ fromJson(steps.quay.outputs.response) }} | jq '[ .tags[].name]')"
         echo ${{ env.snapshot }} > snapshot.txt
         git add snapshot.txt
