@@ -27,9 +27,9 @@ jobs:
         customHeaders: '{"Content-Type": "application/json"}'
     - name: Show Response
       run: |
-        snapshot = $(echo ${{ steps.quay.outputs.response }} | jq '[ .tags[].name] | map(select(. | startswith("2.6.0-SNAPSHOT")))' | jq .[0])
-        echo $snapshot > snapshot.txt
+        echo snapshot=$(echo ${{ steps.quay.outputs.response }} | jq '[ .tags[].name] | map(select(. | startswith("2.6.0-SNAPSHOT")))' | jq .[0])
+        echo ${{ env.snapshot }} > snapshot.txt
         git add snapshot.txt
-        git commit -s -m $snapshot
+        git commit -s -m ${{ env.snapshot }}
 
         
