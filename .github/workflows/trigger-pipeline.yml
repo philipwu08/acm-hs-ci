@@ -29,6 +29,7 @@ jobs:
       run: |
         snapshot=$(echo ${{ toJson(steps.quay.outputs.response) }} | jq '[ .tags[].name] | map(select(. | startswith("2.6.0-SNAPSHOT")))' | jq .[0])
         echo $snapshot > snapshot.txt
+        cat snapshot.txt
         git add snapshot.txt
         git commit -s -m $snapshot
         
