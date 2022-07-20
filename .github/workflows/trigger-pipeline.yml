@@ -6,7 +6,7 @@ name: HyperShift CI Trigger
 on:
   schedule:
     # Runs "8:30AM each day" (see https://crontab.guru)
-    - cron: '30 12 * * *'
+    - cron: '30 12 * * 1-5'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
