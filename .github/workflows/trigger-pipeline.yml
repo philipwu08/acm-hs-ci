@@ -16,24 +16,23 @@ jobs:
   query:
     runs-on: ubuntu-latest
     steps:
-    - name: Run a one-line script
+    - name: Checkout Git repo
       uses: actions/checkout@v3
-    - name: Query Quay.io
+    - name: Query build in Quay.io
       id: quay
       uses: fjogeleit/http-request-action@v1
       with:
         url: 'https://quay.io/api/v1/repository/stolostron/acm-custom-registry/tag/?limit=20'
         method: 'GET'
         customHeaders: '{"Content-Type": "application/json"}'
-    - name: Show Response
+    - name: Push build to Git
       run: |
         snapshot=$(echo ${{ toJson(steps.quay.outputs.response) }} | jq '[ .tags[].name] | map(select(. | startswith("2.6.0-SNAPSHOT")))' | jq .[0] | tr -d '"')
         echo $snapshot > snapshot.txt
         cat snapshot.txt
         git config --global user.email "phwu@redhat.com"
         git config --global user.name "ACM HyperShift CI Bot"
-        git config --get remote.origin.url
         git add snapshot.txt
-        git commit -s -m $snapshot
+        git commit -m $snapshot
         git push origin main
         
