@@ -25,7 +25,7 @@ jobs:
         url: 'https://quay.io/api/v1/repository/stolostron/acm-custom-registry/tag/?limit=20'
         method: 'GET'
         customHeaders: '{"Content-Type": "application/json"}'
-    - name: Push build to Git
+    - name: Push build ID to Git
       run: |
         snapshot=$(echo ${{ toJson(steps.quay.outputs.response) }} | jq '[ .tags[].name] | map(select(. | startswith("2.6.0-SNAPSHOT")))' | jq .[0] | tr -d '"')
         echo $snapshot > snapshot.txt
